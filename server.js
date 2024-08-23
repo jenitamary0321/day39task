@@ -11,9 +11,15 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/mentor-student-db')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Failed to connect to MongoDB', err));
+mongoose.connect('mongodb://localhost:27017/mentor-student-db', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.once('open', () => {
+  console.log('Connected to MongoDB');
+});
 
 // Routes
 app.use('/api/mentors', require('./routes/mentors'));
